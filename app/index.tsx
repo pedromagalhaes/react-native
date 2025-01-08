@@ -3,11 +3,14 @@
 
 import * as React from 'react';
 import { View, FlatList, Dimensions, ActivityIndicator, Image } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { Info, Star } from 'lucide-react-native';
+import { Avatar } from '~/components/ui/avatar';
 import { Text } from '~/components/ui/text';
 import Constants from 'expo-constants';
 import { Link } from 'expo-router';
 import { Pressable } from 'react-native';
-import { Entity, Service, Review, Event, Category, Location } from '~/types';
+import { fetchData, fetchReviews, fetchEvents, fetchCategories, fetchLocations } from '~/utils/api';
 import EntityCard from '~/components/EntityCard';
 import ServiceCard from '~/components/ServiceCard';
 import EventCard from '~/components/EventCard';
@@ -17,6 +20,7 @@ import StarRating from '~/components/StarRating';
 import CarouselSection from '~/components/CarouselSection';
 
 const serverUrl = Constants.manifest?.extra?.SERVER_URL || "http://localhost:4001";
+const SCREEN_WIDTH = Dimensions.get('window').width;
 const SIDE_PADDING = 16;
 
 export default function Screen() {
@@ -29,75 +33,19 @@ export default function Screen() {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    fetchData();
-    fetchReviews();
-    fetchEvents();
-    fetchCategories();
-    fetchLocations();
+    const loadData = async () => {
+      setLoading(true);
+      const { entities, services } = await fetchData();
+      setEntities(entities);
+      setServices(services);
+      setReviews(await fetchReviews());
+      setEvents(await fetchEvents());
+      setCategories(await fetchCategories());
+      setLocations(await fetchLocations());
+      setLoading(false);
+    };
+    loadData();
   }, []);
-
-  const fetchData = async () => {
-    try {
-      const [entitiesResponse, servicesResponse] = await Promise.all([
-        fetch(`${serverUrl}/api/entities`),
-        fetch(`${serverUrl}/api/entities/services`)
-      ]);
-
-      const [entitiesData, servicesData] = await Promise.all([
-        entitiesResponse.json(),
-        servicesResponse.json()
-      ]);
-
-      setEntities(entitiesData.data || entitiesData);
-      setServices(servicesData.data || servicesData);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchReviews = async () => {
-    try {
-      const response = await fetch(`${serverUrl}/api/entities/reviews`);
-      const data = await response.json();
-      setReviews(data.data || data);
-    } catch (error) {
-      console.error('Error fetching reviews:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchEvents = async () => {
-    try {
-      const response = await fetch(`${serverUrl}/api/entities/events`);
-      const data = await response.json();
-      setEvents(data.data || data);
-    } catch (error) {
-      console.error('Error fetching events:', error);
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const response = await fetch(`${serverUrl}/api/entities/categories`);
-      const data = await response.json();
-      setCategories(data.data || data);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    }
-  };
-
-  const fetchLocations = async () => {
-    try {
-      const response = await fetch(`${serverUrl}/api/entities/locations`);
-      const data = await response.json();
-      setLocations(data.data || data);
-    } catch (error) {
-      console.error('Error fetching locations:', error);
-    }
-  };
 
   if (loading) {
     return (
