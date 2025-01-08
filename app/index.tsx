@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, FlatList, Dimensions, ActivityIndicator, ScrollView } from 'react-native';
+import { View, FlatList, Dimensions, ActivityIndicator, ScrollView, Image } from 'react-native';
 import Animated, { FadeInUp, FadeOutDown, LayoutAnimationConfig } from 'react-native-reanimated';
 import { Info, Star } from 'lucide-react-native';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
@@ -21,7 +21,10 @@ const GITHUB_AVATAR_URI =
   'https://i.pinimg.com/originals/ef/a2/8d/efa28d18a04e7fa40ed49eeb0ab660db.jpg';
 
 const serverUrl = Constants.manifest?.extra?.SERVER_URL || "http://localhost:4001";
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const CARD_WIDTH = SCREEN_WIDTH * 0.35;
+const SPACING = 8;
+const SIDE_PADDING = 16;
 
 interface Entity {
   id: number;
@@ -53,8 +56,6 @@ interface Service {
   };
 }
 
-const CARD_WIDTH = SCREEN_WIDTH * 0.67; // Shows 1.5 cards
-
 const StarRating = ({ rating, reviews }: { rating: string; reviews: string }) => {
   const ratingNum = Number(rating);
   const fullStars = Math.floor(ratingNum);
@@ -78,72 +79,73 @@ const StarRating = ({ rating, reviews }: { rating: string; reviews: string }) =>
 };
 
 const EntityCard = ({ item }: { item: Entity }) => (
-  <View style={{ width: CARD_WIDTH - 16 }} className='mx-2'>
-    <Card className='rounded-2xl'>
-      <CardHeader className='items-center'>
-        <Avatar alt={`${item.entity_name}'s Image`} className='w-24 h-24'>
-          <AvatarImage source={{ uri: item.image_url }} />
-          <AvatarFallback>
-            <Text>{item.entity_name.substring(0, 2)}</Text>
-          </AvatarFallback>
-        </Avatar>
-        <View className='p-3' />
-        <View className='pb-2'>
-          <Text className='text-xl font-semibold text-center'>{item.entity_name}</Text>
-        </View>
-        <View>
-          <Text className='text-base font-semibold text-center'>{item.category.category_name}</Text>
-        </View>
-      </CardHeader>
-      <CardContent>
-        <View>
-          <Text className='text-sm text-muted-foreground text-center'>{item.short_description}</Text>
-        </View>
-        <View className='pt-4 items-center'>
-          <StarRating rating={item.rating} reviews={item.reviews} />
-        </View>
-        <View className='pt-4'>
-          <Text className='text-sm text-muted-foreground text-center'>{item.location.location_name}</Text>
-        </View>
-      </CardContent>
-    </Card>
+  <View style={{ width: CARD_WIDTH }}>
+    <View className='w-full aspect-square rounded-lg overflow-hidden bg-muted'>
+      <Image
+        source={{ uri: item.image_url }}
+        className='w-full h-full'
+        style={{ resizeMode: 'cover' }}
+      />
+    </View>
+    <View className='mt-2'>
+      <Text className='font-semibold text-foreground' numberOfLines={2}>{item.entity_name}</Text>
+      <Text className='text-sm text-muted-foreground' numberOfLines={1}>{item.category.category_name}</Text>
+      <View className='flex-row items-center mt-1'>
+        <Star size={12} className='text-yellow-400' fill='currentColor' />
+        <Text className='text-xs text-muted-foreground ml-1'>{Number(item.rating).toFixed(1)} ({item.reviews})</Text>
+      </View>
+    </View>
   </View>
 );
 
 const ServiceCard = ({ item }: { item: Service }) => (
-  <View style={{ width: CARD_WIDTH - 16 }} className='mx-2'>
-    <Card className='rounded-2xl'>
-      <CardHeader className='items-center'>
-        <Avatar alt={`${item.service_name}'s Image`} className='w-24 h-24'>
-          <AvatarImage source={{ uri: item.image_url }} />
-          <AvatarFallback>
-            <Text>{item.service_name.substring(0, 2)}</Text>
-          </AvatarFallback>
-        </Avatar>
-        <View className='p-3' />
-        <View className='pb-2'>
-          <Text className='text-xl font-semibold text-center'>{item.service_name}</Text>
+  <View style={{ width: CARD_WIDTH }}>
+    <View className='w-full aspect-square rounded-lg overflow-hidden bg-muted'>
+      <Image
+        source={{ uri: item.image_url }}
+        className='w-full h-full'
+        style={{ resizeMode: 'cover' }}
+      />
+    </View>
+    <View className='mt-2'>
+      <Text className='font-semibold text-foreground' numberOfLines={2}>{item.service_name}</Text>
+      <Text className='text-sm text-muted-foreground' numberOfLines={1}>{item.entity.entity_name}</Text>
+      <View className='mt-1'>
+        <View className='px-2 py-0.5 bg-primary/10 self-start rounded-full'>
+          <Text className='text-xs text-primary font-medium capitalize'>{item.status.name}</Text>
         </View>
-        <View>
-          <Text className='text-base font-semibold text-center'>{item.entity.entity_name}</Text>
-        </View>
-      </CardHeader>
-      <CardContent>
-        <View>
-          <Text className='text-sm text-muted-foreground text-center'>{item.short_description}</Text>
-        </View>
-        <View className='pt-4 items-center'>
-          <View className='px-3 py-1 bg-primary/10 rounded-full'>
-            <Text className='text-xs text-primary font-medium capitalize'>{item.status.name}</Text>
-          </View>
-        </View>
-      </CardContent>
-    </Card>
+      </View>
+    </View>
+  </View>
+);
+
+const CarouselSection = ({ title, subtitle, data, renderItem }: {
+  title: string;
+  subtitle: string;
+  data: any[];
+  renderItem: any;
+}) => (
+  <View className='w-full'>
+    <View className='px-5 mb-4'>
+      <Text className='text-2xl font-bold text-foreground'>{title}</Text>
+      <Text className='text-sm text-muted-foreground'>{subtitle}</Text>
+    </View>
+    <FlatList
+      data={data}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id.toString()}
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      decelerationRate="fast"
+      contentContainerStyle={{
+        paddingHorizontal: SIDE_PADDING
+      }}
+      ItemSeparatorComponent={() => <View style={{ width: SPACING }} />}
+    />
   </View>
 );
 
 export default function Screen() {
-  const [progress, setProgress] = React.useState(78);
   const [entities, setEntities] = React.useState<Entity[]>([]);
   const [services, setServices] = React.useState<Service[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -159,11 +161,13 @@ export default function Screen() {
         fetch(`${serverUrl}/api/entities/services`)
       ]);
 
-      const entitiesJson = await entitiesResponse.json();
-      const servicesJson = await servicesResponse.json();
+      const [entitiesData, servicesData] = await Promise.all([
+        entitiesResponse.json(),
+        servicesResponse.json()
+      ]);
 
-      setEntities(entitiesJson.data);
-      setServices(servicesJson.data);
+      setEntities(entitiesData.data || entitiesData);
+      setServices(servicesData.data || servicesData);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -171,61 +175,38 @@ export default function Screen() {
     }
   };
 
-  function updateProgressValue() {
-    setProgress(Math.floor(Math.random() * 100));
-  }
-
   if (loading) {
     return (
-      <View className='flex-1 justify-center items-center'>
+      <View className='flex-1 items-center justify-center'>
         <ActivityIndicator size="large" />
       </View>
     );
   }
 
+  console.log('Entities:', entities);
+  console.log('Services:', services);
+
   return (
     <ScrollView
-      className='flex-1 bg-secondary/30'
+      className='flex-1 bg-secondary/30 pt-6'
       contentContainerStyle={{ paddingBottom: 24 }}
       showsVerticalScrollIndicator={false}
     >
-      <View className='p-6'>
-        <View className='w-full'>
-          <View className='mb-4'>
-            <Text className='text-2xl font-bold text-foreground'>Entities</Text>
-            <Text className='text-sm text-muted-foreground'>Discover local services and businesses</Text>
-          </View>
-          <FlatList
-            data={entities}
-            renderItem={({ item }) => <EntityCard item={item} />}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            snapToInterval={CARD_WIDTH}
-            decelerationRate="fast"
-            className='w-full'
-          />
-        </View>
+      <CarouselSection
+        title="Entities"
+        subtitle="Discover local services and businesses"
+        data={entities}
+        renderItem={({ item }) => <EntityCard item={item} />}
+      />
 
-        <View className='w-full mt-8'>
-          <View className='mb-4'>
-            <Text className='text-2xl font-bold text-foreground'>Services</Text>
-            <Text className='text-sm text-muted-foreground'>Explore available services</Text>
-          </View>
-          <FlatList
-            data={services}
-            renderItem={({ item }) => <ServiceCard item={item} />}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            snapToInterval={CARD_WIDTH}
-            decelerationRate="fast"
-            className='w-full'
-          />
-        </View>
-      </View>
+      <View className='h-8' />
+
+      <CarouselSection
+        title="Services"
+        subtitle="Explore available services"
+        data={services}
+        renderItem={({ item }) => <ServiceCard item={item} />}
+      />
     </ScrollView>
   );
 }
