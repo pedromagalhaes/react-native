@@ -1,5 +1,8 @@
+// This file uses a single FlatList to manage all sections of the app, including carousels and vertical lists.
+// This setup avoids nesting VirtualizedLists inside ScrollViews to prevent performance issues and warnings.
+
 import * as React from 'react';
-import { View, FlatList, Dimensions, ActivityIndicator, ScrollView, Image } from 'react-native';
+import { View, FlatList, Dimensions, ActivityIndicator, Image, ScrollView } from 'react-native';
 import Animated, { FadeInUp, FadeOutDown, LayoutAnimationConfig } from 'react-native-reanimated';
 import { Info, Star } from 'lucide-react-native';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
@@ -129,8 +132,8 @@ const EntityCard = ({ item }: { item: Entity }) => (
         <View className='w-full aspect-square rounded-lg overflow-hidden bg-muted'>
           <Image
             source={{ uri: item.image_url }}
-            className='w-full h-full'
-            style={{ resizeMode: 'cover' }}
+            className='w-full'
+            style={{ width: '100%', height: undefined, aspectRatio: 10 / 16 }}
           />
         </View>
         <View className='mt-2'>
@@ -153,8 +156,8 @@ const ServiceCard = ({ item }: { item: Service }) => (
         <View className='w-full aspect-square rounded-lg overflow-hidden bg-muted'>
           <Image
             source={{ uri: item.image_url }}
-            className='w-full h-full'
-            style={{ resizeMode: 'cover' }}
+            className='w-full'
+            style={{ width: '100%', height: undefined, aspectRatio: 10 / 16 }}
           />
         </View>
         <View className='mt-2'>
@@ -171,36 +174,15 @@ const ServiceCard = ({ item }: { item: Service }) => (
   </Link>
 );
 
-const ReviewCard = ({ item }: { item: Review }) => (
-  <Link href={`/reviews/${item.id}`} asChild>
-    <Pressable>
-      <View style={{ width: CARD_WIDTH }}>
-        <View className='w-full aspect-square rounded-lg overflow-hidden bg-muted'>
-          <Image
-            source={{ uri: item.entity.image_url }}
-            className='w-full h-full'
-            style={{ resizeMode: 'cover' }}
-          />
-        </View>
-        <View className='mt-2'>
-          <Text className='font-semibold text-foreground'>{item.entity.entity_name}</Text>
-          <Text className='text-sm text-muted-foreground'>{item.comment}</Text>
-          <StarRating rating={item.rating.toString()} reviews={item.user.name} />
-        </View>
-      </View>
-    </Pressable>
-  </Link>
-);
-
 const EventCard = ({ item }: { item: Event }) => (
   <Link href={`/events/${item.id}`} asChild>
     <Pressable>
       <View style={{ width: CARD_WIDTH }}>
-        <View className='w-full aspect-square rounded-lg overflow-hidden bg-muted'>
+        <View className='w-full rounded-lg overflow-hidden bg-muted'>
           <Image
             source={{ uri: item.image_url }}
-            className='w-full h-full'
-            style={{ resizeMode: 'cover' }}
+            className='w-full'
+            style={{ width: '100%', height: undefined, aspectRatio: 10 / 14 }}
           />
         </View>
         <View className='mt-2'>
@@ -220,8 +202,8 @@ const CategoryCard = ({ item }: { item: Category }) => (
         <View className='w-full aspect-square rounded-lg overflow-hidden bg-muted'>
           <Image
             source={{ uri: item.image }}
-            className='w-full h-full'
-            style={{ resizeMode: 'cover' }}
+            className='w-full'
+            style={{ width: '100%', height: undefined, aspectRatio: 10 / 16 }}
           />
         </View>
         <View className='mt-2'>
@@ -239,8 +221,8 @@ const LocationCard = ({ item }: { item: Location }) => (
         <View className='w-full aspect-square rounded-lg overflow-hidden bg-muted'>
           <Image
             source={{ uri: item.image }}
-            className='w-full h-full'
-            style={{ resizeMode: 'cover' }}
+            className='w-full'
+            style={{ width: '100%', height: undefined, aspectRatio: 10 / 16 }}
           />
         </View>
         <View className='mt-2'>
@@ -366,91 +348,78 @@ export default function Screen() {
     );
   }
 
-  console.log('Entities:', entities);
-  console.log('Services:', services);
-  console.log('Reviews:', reviews);
-  console.log('Events:', events);
-  console.log('Categories:', categories);
-  console.log('Locations:', locations);
-
   return (
-    <ScrollView
-      className='flex-1 bg-secondary/30 pt-6'
-      contentContainerStyle={{ paddingBottom: 24 }}
-      showsVerticalScrollIndicator={false}
-    >
-      <CarouselSection
-        title="Entities"
-        subtitle="Discover local services and businesses"
-        data={entities}
-        renderItem={({ item }) => <EntityCard item={item} />}
-      />
-
-      <View className='h-8' />
-
-      <CarouselSection
-        title="Services"
-        subtitle="Explore available services"
-        data={services}
-        renderItem={({ item }) => <ServiceCard item={item} />}
-      />
-
-      <View className='h-8' />
-
-      <View className='px-5 mb-4'>
-        <Text className='text-2xl font-bold text-foreground'>Reviews</Text>
-        <Text className='text-sm text-muted-foreground'>Read user reviews</Text>
-      </View>
-      <FlatList
-        data={reviews}
-        renderItem={({ item }) => (
-          <Link href={`/reviews/${item.id}`} asChild>
-            <Pressable>
-              <View style={{ flexDirection: 'row', alignItems: 'center', padding: 8 }}>
-                <Image
-                  source={{ uri: item.entity.image_url }}
-                  style={{ width: 80, height: 80, borderRadius: 8 }}
-                />
-                <View style={{ flex: 1, marginLeft: 8 }}>
-                  <Text className='font-semibold text-foreground'>{item.entity.entity_name}</Text>
-                  <Text className='text-sm text-muted-foreground'>{item.comment}</Text>
-                  <StarRating rating={item.rating.toString()} reviews={item.user.name} />
-                </View>
-              </View>
-            </Pressable>
-          </Link>
-        )}
-        keyExtractor={(item) => item.id.toString()}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: SIDE_PADDING }}
-      />
-
-      <View className='h-8' />
-
-      <CarouselSection
-        title="Events"
-        subtitle="Check out upcoming events"
-        data={events}
-        renderItem={({ item }) => <EventCard item={item} />}
-      />
-
-      <View className='h-8' />
-
-      <CarouselSection
-        title="Categories"
-        subtitle="Explore various categories"
-        data={categories}
-        renderItem={({ item }) => <CategoryCard item={item} />}
-      />
-
-      <View className='h-8' />
-
-      <CarouselSection
-        title="Locations"
-        subtitle="Discover various locations"
-        data={locations}
-        renderItem={({ item }) => <LocationCard item={item} />}
-      />
-    </ScrollView>
+    <FlatList
+      className='pt-8'
+      data={[]}
+      renderItem={() => null}
+      keyExtractor={() => 'dummy'}
+      ListHeaderComponent={
+        <View>
+          <CarouselSection
+            title="Entities"
+            subtitle="Discover local services and businesses"
+            data={entities}
+            renderItem={({ item }) => <EntityCard item={item} />}
+          />
+          <View className='h-8' />
+          <CarouselSection
+            title="Services"
+            subtitle="Explore available services"
+            data={services}
+            renderItem={({ item }) => <ServiceCard item={item} />}
+          />
+          <View className='h-8' />
+          <View className='px-5 mb-0'>
+            <Text className='text-2xl font-bold text-foreground'>Reviews</Text>
+            <Text className='text-sm text-muted-foreground'>Read user reviews</Text>
+          </View>
+          <FlatList
+            data={reviews}
+            renderItem={({ item }) => (
+              <Link href={`/reviews/${item.id}`} asChild>
+                <Pressable>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 16, paddingRight: 16, paddingTop: 16 }}>
+                    <Image
+                      source={{ uri: item.entity.image_url }}
+                      style={{ width: 80, height: 80, borderRadius: 8 }}
+                    />
+                    <View style={{ flex: 1, marginLeft: 8 }}>
+                      <Text className='font-semibold text-foreground'>{item.entity.entity_name}</Text>
+                      <Text className='text-sm text-muted-foreground'>{item.comment}</Text>
+                      <StarRating rating={item.rating.toString()} reviews={item.user.name} />
+                    </View>
+                  </View>
+                </Pressable>
+              </Link>
+            )}
+            keyExtractor={(item) => item.id.toString()}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: SIDE_PADDING }}
+          />
+          <View className='h-8' />
+          <CarouselSection
+            title="Events"
+            subtitle="Check out upcoming events"
+            data={events}
+            renderItem={({ item }) => <EventCard item={item} />}
+          />
+          <View className='h-8' />
+          <CarouselSection
+            title="Categories"
+            subtitle="Explore various categories"
+            data={categories}
+            renderItem={({ item }) => <CategoryCard item={item} />}
+          />
+          <View className='h-8' />
+          <CarouselSection
+            title="Locations"
+            subtitle="Discover various locations"
+            data={locations}
+            renderItem={({ item }) => <LocationCard item={item} />}
+          />
+        </View>
+      }
+    />
   );
 }
