@@ -41,6 +41,16 @@ http://localhost:4001/api/entities/locations
     }
 }
 
+http://localhost:4001/api/entities/categories/10
+
+{
+    "id": 10,
+    "category_name": "animais",
+    "image": "https://picsum.photos/800/600",
+    "created_at": "2025-01-08T09:02:49.284Z",
+    "updated_at": "2025-01-08T09:02:49.284Z"
+}
+
 http://localhost:4001/api/entities/categories
 
 {
