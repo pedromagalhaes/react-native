@@ -1,3 +1,207 @@
+http://localhost:4001/api/entities/events
+
+{
+    "data": [
+        {
+            "id": 3,
+            "event_name": "Tech Expo 2025",
+            "latitude": "41.87810000",
+            "longitude": "-87.62980000",
+            "location_name": "Tech World Exhibition Center",
+            "access_type": "private",
+            "ticket_url": "https://tickets.example.com/tech-expo",
+            "image_url": "https://picsum.photos/800/600",
+            "created_at": "2025-01-07T15:20:07.857Z",
+            "updated_at": "2025-01-07T15:20:07.857Z",
+            "published_at": null,
+            "description": "Discover the future of gadgets and AI.",
+            "entity": {
+                "id": 3,
+                "entity_name": "Intermarché Moncarapacho"
+            },
+            "event_category": {
+                "id": 3,
+                "category_name": "Art Exhibition"
+            },
+            "status": {
+                "id": 2,
+                "name": "pending"
+            }
+        },
+        {
+            "id": 2,
+            "event_name": "Coffee Tasting Event",
+            "latitude": "34.05220000",
+            "longitude": "-118.24370000",
+            "location_name": "Cafe Delight Lounge",
+            "access_type": "public",
+            "ticket_url": "https://tickets.example.com/coffee-tasting",
+            "image_url": "https://picsum.photos/800/600",
+            "created_at": "2025-01-07T15:20:07.857Z",
+            "updated_at": "2025-01-07T15:20:07.857Z",
+            "published_at": null,
+            "description": "Sample our newest coffee blends.",
+            "entity": {
+                "id": 2,
+                "entity_name": "Galp"
+            },
+            "event_category": {
+                "id": 2,
+                "category_name": "Food Festival"
+            },
+            "status": {
+                "id": 3,
+                "name": "published"
+            }
+        },
+        {
+            "id": 1,
+            "event_name": "Live Music Night",
+            "latitude": "40.71280000",
+            "longitude": "-74.00600000",
+            "location_name": "Company A Main Hall",
+            "access_type": "public",
+            "ticket_url": "https://tickets.example.com/music-night",
+            "image_url": "https://picsum.photos/800/600",
+            "created_at": "2025-01-07T15:20:07.857Z",
+            "updated_at": "2025-01-07T15:20:07.857Z",
+            "published_at": null,
+            "description": "Enjoy an evening of jazz and pop hits.",
+            "entity": {
+                "id": 1,
+                "entity_name": "Mercado Municipal de Moncarapacho"
+            },
+            "event_category": {
+                "id": 1,
+                "category_name": "Music Concert"
+            },
+            "status": {
+                "id": 3,
+                "name": "published"
+            }
+        }
+    ],
+    "pagination": {
+        "currentPage": 1,
+        "totalPages": 1,
+        "totalItems": 3,
+        "itemsPerPage": 10
+    }
+}
+
+http://localhost:4001/api/entities/reviews
+
+{
+    "data": [
+        {
+            "id": 1,
+            "rating": 5,
+            "comment": "Excellent service!",
+            "created_at": "2025-01-07T15:20:07.857Z",
+            "user": {
+                "id": 27,
+                "name": "Chris Martin",
+                "email": "chris.martin@temp.com"
+            },
+            "entity": {
+                "id": 1,
+                "entity_name": "Mercado Municipal de Moncarapacho",
+                "contact_info": "phone: +1234567",
+                "image_url": "https://picsum.photos/800/600",
+                "short_description": "A popular local business.",
+                "url": "https://company-a.com",
+                "created_at": "2025-01-07T15:20:07.857085+00:00",
+                "updated_at": "2025-01-07T15:20:07.857085+00:00"
+            },
+            "status": {
+                "id": 4,
+                "status_name": "approved"
+            }
+        },
+        {
+            "id": 2,
+            "rating": 4,
+            "comment": "Pretty good, will return.",
+            "created_at": "2025-01-07T15:20:07.857Z",
+            "user": {
+                "id": 29,
+                "name": "Sarah Connor",
+                "email": "sarah.connor@temp.com"
+            },
+            "entity": {
+                "id": 1,
+                "entity_name": "Mercado Municipal de Moncarapacho",
+                "contact_info": "phone: +1234567",
+                "image_url": "https://picsum.photos/800/600",
+                "short_description": "A popular local business.",
+                "url": "https://company-a.com",
+                "created_at": "2025-01-07T15:20:07.857085+00:00",
+                "updated_at": "2025-01-07T15:20:07.857085+00:00"
+            },
+            "status": {
+                "id": 4,
+                "status_name": "approved"
+            }
+        },
+        {
+            "id": 3,
+            "rating": 5,
+            "comment": "Amazing coffee!",
+            "created_at": "2025-01-07T15:20:07.857Z",
+            "user": {
+                "id": 30,
+                "name": "Bob Roberts",
+                "email": "bob.roberts@temp.com"
+            },
+            "entity": {
+                "id": 2,
+                "entity_name": "Galp",
+                "contact_info": "contact@cafedelight.com",
+                "image_url": "https://picsum.photos/800/600",
+                "short_description": "A delightful coffee experience.",
+                "url": "https://cafe-delight.com",
+                "created_at": "2025-01-07T15:20:07.857085+00:00",
+                "updated_at": "2025-01-07T15:20:07.857085+00:00"
+            },
+            "status": {
+                "id": 4,
+                "status_name": "approved"
+            }
+        },
+        {
+            "id": 4,
+            "rating": 3,
+            "comment": "Average experience.",
+            "created_at": "2025-01-07T15:20:07.857Z",
+            "user": {
+                "id": 28,
+                "name": "Emily Stone",
+                "email": "emily.stone@temp.com"
+            },
+            "entity": {
+                "id": 3,
+                "entity_name": "Intermarché Moncarapacho",
+                "contact_info": "info@techworld.com",
+                "image_url": "https://picsum.photos/800/600",
+                "short_description": "Your one-stop shop for electronics.",
+                "url": "https://tech-world.com",
+                "created_at": "2025-01-07T15:20:07.857085+00:00",
+                "updated_at": "2025-01-07T15:20:07.857085+00:00"
+            },
+            "status": {
+                "id": 1,
+                "status_name": "draft"
+            }
+        }
+    ],
+    "pagination": {
+        "currentPage": 1,
+        "totalPages": 1,
+        "totalItems": 4,
+        "itemsPerPage": 10
+    }
+}
+
 http://localhost:4001/api/entities/services
 
 {
