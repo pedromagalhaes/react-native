@@ -158,10 +158,10 @@ export default function Screen() {
         fetch(`${serverUrl}/api/entities`),
         fetch(`${serverUrl}/api/entities/services`)
       ]);
-      
+
       const entitiesJson = await entitiesResponse.json();
       const servicesJson = await servicesResponse.json();
-      
+
       setEntities(entitiesJson.data);
       setServices(servicesJson.data);
     } catch (error) {
@@ -184,7 +184,7 @@ export default function Screen() {
   }
 
   return (
-    <ScrollView 
+    <ScrollView
       className='flex-1 bg-secondary/30'
       contentContainerStyle={{ paddingBottom: 24 }}
       showsVerticalScrollIndicator={false}
