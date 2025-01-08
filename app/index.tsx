@@ -87,6 +87,19 @@ interface Event {
   description: string;
 }
 
+interface Category {
+  id: number;
+  category_name: string;
+  image: string;
+}
+
+interface Location {
+  id: number;
+  location_name: string;
+  address: string | null;
+  image: string;
+}
+
 const StarRating = ({ rating, reviews }: { rating: string; reviews: string }) => {
   const ratingNum = Number(rating);
   const fullStars = Math.floor(ratingNum);
@@ -200,6 +213,45 @@ const EventCard = ({ item }: { item: Event }) => (
   </Link>
 );
 
+const CategoryCard = ({ item }: { item: Category }) => (
+  <Link href={`/categories/${item.id}`} asChild>
+    <Pressable>
+      <View style={{ width: CARD_WIDTH }}>
+        <View className='w-full aspect-square rounded-lg overflow-hidden bg-muted'>
+          <Image
+            source={{ uri: item.image }}
+            className='w-full h-full'
+            style={{ resizeMode: 'cover' }}
+          />
+        </View>
+        <View className='mt-2'>
+          <Text className='font-semibold text-foreground'>{item.category_name}</Text>
+        </View>
+      </View>
+    </Pressable>
+  </Link>
+);
+
+const LocationCard = ({ item }: { item: Location }) => (
+  <Link href={`/locations/${item.id}`} asChild>
+    <Pressable>
+      <View style={{ width: CARD_WIDTH }}>
+        <View className='w-full aspect-square rounded-lg overflow-hidden bg-muted'>
+          <Image
+            source={{ uri: item.image }}
+            className='w-full h-full'
+            style={{ resizeMode: 'cover' }}
+          />
+        </View>
+        <View className='mt-2'>
+          <Text className='font-semibold text-foreground'>{item.location_name}</Text>
+          {item.address && <Text className='text-sm text-muted-foreground'>{item.address}</Text>}
+        </View>
+      </View>
+    </Pressable>
+  </Link>
+);
+
 const CarouselSection = ({ title, subtitle, data, renderItem }: {
   title: string;
   subtitle: string;
@@ -231,12 +283,16 @@ export default function Screen() {
   const [services, setServices] = React.useState<Service[]>([]);
   const [reviews, setReviews] = React.useState<Review[]>([]);
   const [events, setEvents] = React.useState<Event[]>([]);
+  const [categories, setCategories] = React.useState<Category[]>([]);
+  const [locations, setLocations] = React.useState<Location[]>([]);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     fetchData();
     fetchReviews();
     fetchEvents();
+    fetchCategories();
+    fetchLocations();
   }, []);
 
   const fetchData = async () => {
@@ -282,6 +338,26 @@ export default function Screen() {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch(`${serverUrl}/api/entities/categories`);
+      const data = await response.json();
+      setCategories(data.data || data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const fetchLocations = async () => {
+    try {
+      const response = await fetch(`${serverUrl}/api/entities/locations`);
+      const data = await response.json();
+      setLocations(data.data || data);
+    } catch (error) {
+      console.error('Error fetching locations:', error);
+    }
+  };
+
   if (loading) {
     return (
       <View className='flex-1 items-center justify-center'>
@@ -294,6 +370,8 @@ export default function Screen() {
   console.log('Services:', services);
   console.log('Reviews:', reviews);
   console.log('Events:', events);
+  console.log('Categories:', categories);
+  console.log('Locations:', locations);
 
   return (
     <ScrollView
@@ -333,6 +411,24 @@ export default function Screen() {
         subtitle="Check out upcoming events"
         data={events}
         renderItem={({ item }) => <EventCard item={item} />}
+      />
+
+      <View className='h-8' />
+
+      <CarouselSection
+        title="Categories"
+        subtitle="Explore various categories"
+        data={categories}
+        renderItem={({ item }) => <CategoryCard item={item} />}
+      />
+
+      <View className='h-8' />
+
+      <CarouselSection
+        title="Locations"
+        subtitle="Discover various locations"
+        data={locations}
+        renderItem={({ item }) => <LocationCard item={item} />}
       />
     </ScrollView>
   );

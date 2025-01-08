@@ -1,3 +1,129 @@
+http://localhost:4001/api/entities/locations
+
+{
+    "data": [
+        {
+            "id": 4,
+            "location_name": "Fuseta",
+            "address": null,
+            "image": "https://picsum.photos/800/600"
+        },
+        {
+            "id": 1,
+            "location_name": "Moncarapacho",
+            "address": "123 Main St, New York, NY",
+            "image": "https://picsum.photos/800/600"
+        },
+        {
+            "id": 2,
+            "location_name": "Olhao",
+            "address": "456 Ocean Ave, Los Angeles, CA",
+            "image": "https://picsum.photos/800/600"
+        },
+        {
+            "id": 5,
+            "location_name": "Pechão",
+            "address": null,
+            "image": "https://picsum.photos/800/600"
+        },
+        {
+            "id": 3,
+            "location_name": "Quelfes",
+            "address": "789 Lake St, Chicago, IL",
+            "image": "https://picsum.photos/800/600"
+        }
+    ],
+    "pagination": {
+        "currentPage": 1,
+        "totalPages": 1,
+        "totalItems": 5,
+        "itemsPerPage": 10
+    }
+}
+
+http://localhost:4001/api/entities/categories
+
+{
+    "data": [
+        {
+            "id": 10,
+            "category_name": "animais",
+            "image": "https://picsum.photos/800/600",
+            "created_at": "2025-01-08T09:02:49.284Z",
+            "updated_at": "2025-01-08T09:02:49.284Z"
+        },
+        {
+            "id": 15,
+            "category_name": "auto e moto",
+            "image": "https://picsum.photos/800/600",
+            "created_at": "2025-01-08T09:05:51.950Z",
+            "updated_at": "2025-01-08T09:05:51.950Z"
+        },
+        {
+            "id": 1,
+            "category_name": "comer e beber",
+            "image": "https://picsum.photos/800/600",
+            "created_at": "2025-01-07T15:20:07.857Z",
+            "updated_at": "2025-01-07T15:20:07.857Z"
+        },
+        {
+            "id": 13,
+            "category_name": "cultura e entretenimento",
+            "image": "https://picsum.photos/800/600",
+            "created_at": "2025-01-08T09:05:51.950Z",
+            "updated_at": "2025-01-08T09:05:51.950Z"
+        },
+        {
+            "id": 4,
+            "category_name": "decoração, casa e jardim",
+            "image": "https://picsum.photos/800/600",
+            "created_at": "2025-01-07T15:20:07.857Z",
+            "updated_at": "2025-01-07T15:20:07.857Z"
+        },
+        {
+            "id": 12,
+            "category_name": "desporto e lazer",
+            "image": "https://picsum.photos/800/600",
+            "created_at": "2025-01-08T09:05:51.950Z",
+            "updated_at": "2025-01-08T09:05:51.950Z"
+        },
+        {
+            "id": 11,
+            "category_name": "emprego e formação",
+            "image": "https://picsum.photos/800/600",
+            "created_at": "2025-01-08T09:04:35.371Z",
+            "updated_at": "2025-01-08T09:04:35.371Z"
+        },
+        {
+            "id": 14,
+            "category_name": "eventos e catering",
+            "image": "https://picsum.photos/800/600",
+            "created_at": "2025-01-08T09:05:51.950Z",
+            "updated_at": "2025-01-08T09:05:51.950Z"
+        },
+        {
+            "id": 8,
+            "category_name": "fornecedores, indústria e construção",
+            "image": "https://picsum.photos/800/600",
+            "created_at": "2025-01-08T09:02:49.284Z",
+            "updated_at": "2025-01-08T09:02:49.284Z"
+        },
+        {
+            "id": 9,
+            "category_name": "jogos e brinquedos",
+            "image": "https://picsum.photos/800/600",
+            "created_at": "2025-01-08T09:02:49.284Z",
+            "updated_at": "2025-01-08T09:02:49.284Z"
+        }
+    ],
+    "pagination": {
+        "currentPage": 1,
+        "totalPages": 2,
+        "totalItems": 16,
+        "itemsPerPage": 10
+    }
+}
+
 http://localhost:4001/api/entities/events
 
 {
