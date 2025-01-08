@@ -54,4 +54,22 @@ const CardFooter = React.forwardRef<ViewRef, ViewProps>(({ className, ...props }
 ));
 CardFooter.displayName = 'CardFooter';
 
-export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle };
+const ReviewCard = ({ item }: { item: Review }) => (
+  <Link href={`/reviews/${item.id}`} asChild>
+    <Pressable>
+      <View style={{ flexDirection: 'column', alignItems: 'flex-start', padding: 8 }}>  
+        <Image
+          source={{ uri: item.entity.image }}
+          style={{ width: 80, height: 80, borderRadius: 8 }}
+        />
+        <View style={{ flex: 1, marginTop: 8 }}>
+          <Text className='font-semibold text-foreground'>{item.entity.entity_name}</Text>
+          <Text className='text-sm text-muted-foreground'>{item.comment}</Text>
+          <StarRating rating={item.rating.toString()} reviews={item.user.name} />
+        </View>
+      </View>
+    </Pressable>
+  </Link>
+);
+
+export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, ReviewCard };

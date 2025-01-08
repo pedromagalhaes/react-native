@@ -397,11 +397,32 @@ export default function Screen() {
 
       <View className='h-8' />
 
-      <CarouselSection
-        title="Reviews"
-        subtitle="Read user reviews"
+      <View className='px-5 mb-4'>
+        <Text className='text-2xl font-bold text-foreground'>Reviews</Text>
+        <Text className='text-sm text-muted-foreground'>Read user reviews</Text>
+      </View>
+      <FlatList
         data={reviews}
-        renderItem={({ item }) => <ReviewCard item={item} />}
+        renderItem={({ item }) => (
+          <Link href={`/reviews/${item.id}`} asChild>
+            <Pressable>
+              <View style={{ flexDirection: 'row', alignItems: 'center', padding: 8 }}>
+                <Image
+                  source={{ uri: item.entity.image_url }}
+                  style={{ width: 80, height: 80, borderRadius: 8 }}
+                />
+                <View style={{ flex: 1, marginLeft: 8 }}>
+                  <Text className='font-semibold text-foreground'>{item.entity.entity_name}</Text>
+                  <Text className='text-sm text-muted-foreground'>{item.comment}</Text>
+                  <StarRating rating={item.rating.toString()} reviews={item.user.name} />
+                </View>
+              </View>
+            </Pressable>
+          </Link>
+        )}
+        keyExtractor={(item) => item.id.toString()}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingHorizontal: SIDE_PADDING }}
       />
 
       <View className='h-8' />
