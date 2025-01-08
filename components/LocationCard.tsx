@@ -5,8 +5,6 @@ import { Text } from '~/components/ui/text';
 import { Entity, Service, Review, Event, Category, Location } from '~/types';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const SIDE_PADDING = 16;
-const SPACING = 8;
 const CARD_WIDTH = SCREEN_WIDTH * 0.35;
 
 const LocationCard = ({ item }: { item: Location }) => (

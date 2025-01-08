@@ -3,7 +3,7 @@ import { Text } from '~/components/ui/text';
 import { View, FlatList } from 'react-native';
 
 const SIDE_PADDING = 16;
-const SPACING = 8;
+const SPACING = 16;
 
 const CarouselSection = ({ title, subtitle, data, renderItem }: {
   title: string;
