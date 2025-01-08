@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { View, FlatList, Dimensions, ActivityIndicator } from 'react-native';
 import Animated, { FadeInUp, FadeOutDown, LayoutAnimationConfig } from 'react-native-reanimated';
 import { Info } from '~/lib/icons/Info';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
@@ -15,18 +15,109 @@ import {
 import { Progress } from '~/components/ui/progress';
 import { Text } from '~/components/ui/text';
 import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip';
+import Constants from 'expo-constants';
 
 const GITHUB_AVATAR_URI =
   'https://i.pinimg.com/originals/ef/a2/8d/efa28d18a04e7fa40ed49eeb0ab660db.jpg';
 
+const serverUrl = Constants.manifest?.extra?.SERVER_URL || "http://localhost:4001";
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+
+interface Entity {
+  id: number;
+  entity_name: string;
+  image_url: string;
+  short_description: string;
+  rating: string;
+  reviews: string;
+  category: {
+    category_name: string;
+  };
+  location: {
+    location_name: string;
+  };
+}
+
+const CARD_WIDTH = SCREEN_WIDTH * 0.67; // Shows 1.5 cards
+
+const EntityCard = ({ item }: { item: Entity }) => (
+  <Card className='rounded-2xl mx-2' style={{ width: CARD_WIDTH - 16 }}> {/* 16 accounts for mx-2 */}
+    <CardHeader className='items-center'>
+      <Avatar alt={`${item.entity_name}'s Image`} className='w-24 h-24'>
+        <AvatarImage source={{ uri: item.image_url }} />
+        <AvatarFallback>
+          <Text>{item.entity_name.substring(0, 2)}</Text>
+        </AvatarFallback>
+      </Avatar>
+      <View className='p-3' />
+      <CardTitle className='pb-2 text-center'>{item.entity_name}</CardTitle>
+      <CardDescription className='text-base font-semibold'>{item.category.category_name}</CardDescription>
+    </CardHeader>
+    <CardContent>
+      <Text className='text-sm text-muted-foreground text-center'>{item.short_description}</Text>
+      <View className='pt-4 flex-row justify-center items-center space-x-4'>
+        <View className='items-center'>
+          <Text className='text-sm text-muted-foreground'>Rating</Text>
+          <Text className='text-lg font-semibold text-sky-600'>{Number(item.rating).toFixed(1)}</Text>
+        </View>
+        <View className='items-center'>
+          <Text className='text-sm text-muted-foreground'>Reviews</Text>
+          <Text className='text-lg font-semibold'>{item.reviews}</Text>
+        </View>
+      </View>
+      <View className='pt-4'>
+        <Text className='text-sm text-muted-foreground text-center'>{item.location.location_name}</Text>
+      </View>
+    </CardContent>
+  </Card>
+);
+
 export default function Screen() {
   const [progress, setProgress] = React.useState(78);
+  const [entities, setEntities] = React.useState<Entity[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    fetchEntities();
+  }, []);
+
+  const fetchEntities = async () => {
+    try {
+      const response = await fetch(`${serverUrl}/api/entities`);
+      const json = await response.json();
+      setEntities(json.data);
+    } catch (error) {
+      console.error('Error fetching entities:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   function updateProgressValue() {
     setProgress(Math.floor(Math.random() * 100));
   }
+
+  if (loading) {
+    return (
+      <View className='flex-1 justify-center items-center'>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
   return (
     <View className='flex-1 justify-center items-center gap-5 p-6 bg-secondary/30'>
+      <FlatList
+        data={entities}
+        renderItem={({ item }) => <EntityCard item={item} />}
+        keyExtractor={(item) => item.id.toString()}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        snapToInterval={CARD_WIDTH} // Use card width for snapping
+        decelerationRate="fast"
+        className='w-full'
+      />
       <Card className='w-full max-w-sm p-6 rounded-2xl'>
         <CardHeader className='items-center'>
           <Avatar alt="Rick Sanchez's Avatar" className='w-24 h-24'>
