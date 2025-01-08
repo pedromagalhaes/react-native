@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, FlatList, Dimensions, ActivityIndicator } from 'react-native';
+import { View, FlatList, Dimensions, ActivityIndicator, ScrollView } from 'react-native';
 import Animated, { FadeInUp, FadeOutDown, LayoutAnimationConfig } from 'react-native-reanimated';
 import { Info, Star } from 'lucide-react-native';
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar';
@@ -35,6 +35,21 @@ interface Entity {
   };
   location: {
     location_name: string;
+  };
+}
+
+interface Service {
+  id: number;
+  service_name: string;
+  short_description: string;
+  image_url: string;
+  entity: {
+    id: number;
+    entity_name: string;
+  };
+  status: {
+    id: number;
+    name: string;
   };
 }
 
@@ -95,22 +110,62 @@ const EntityCard = ({ item }: { item: Entity }) => (
   </View>
 );
 
+const ServiceCard = ({ item }: { item: Service }) => (
+  <View style={{ width: CARD_WIDTH - 16 }} className='mx-2'>
+    <Card className='rounded-2xl'>
+      <CardHeader className='items-center'>
+        <Avatar alt={`${item.service_name}'s Image`} className='w-24 h-24'>
+          <AvatarImage source={{ uri: item.image_url }} />
+          <AvatarFallback>
+            <Text>{item.service_name.substring(0, 2)}</Text>
+          </AvatarFallback>
+        </Avatar>
+        <View className='p-3' />
+        <View className='pb-2'>
+          <Text className='text-xl font-semibold text-center'>{item.service_name}</Text>
+        </View>
+        <View>
+          <Text className='text-base font-semibold text-center'>{item.entity.entity_name}</Text>
+        </View>
+      </CardHeader>
+      <CardContent>
+        <View>
+          <Text className='text-sm text-muted-foreground text-center'>{item.short_description}</Text>
+        </View>
+        <View className='pt-4 items-center'>
+          <View className='px-3 py-1 bg-primary/10 rounded-full'>
+            <Text className='text-xs text-primary font-medium capitalize'>{item.status.name}</Text>
+          </View>
+        </View>
+      </CardContent>
+    </Card>
+  </View>
+);
+
 export default function Screen() {
   const [progress, setProgress] = React.useState(78);
   const [entities, setEntities] = React.useState<Entity[]>([]);
+  const [services, setServices] = React.useState<Service[]>([]);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    fetchEntities();
+    fetchData();
   }, []);
 
-  const fetchEntities = async () => {
+  const fetchData = async () => {
     try {
-      const response = await fetch(`${serverUrl}/api/entities`);
-      const json = await response.json();
-      setEntities(json.data);
+      const [entitiesResponse, servicesResponse] = await Promise.all([
+        fetch(`${serverUrl}/api/entities`),
+        fetch(`${serverUrl}/api/entities/services`)
+      ]);
+      
+      const entitiesJson = await entitiesResponse.json();
+      const servicesJson = await servicesResponse.json();
+      
+      setEntities(entitiesJson.data);
+      setServices(servicesJson.data);
     } catch (error) {
-      console.error('Error fetching entities:', error);
+      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
@@ -129,18 +184,48 @@ export default function Screen() {
   }
 
   return (
-    <View className='flex-1 justify-center items-center gap-5 p-6 bg-secondary/30'>
-      <FlatList
-        data={entities}
-        renderItem={({ item }) => <EntityCard item={item} />}
-        keyExtractor={(item) => item.id.toString()}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        snapToInterval={CARD_WIDTH} // Use card width for snapping
-        decelerationRate="fast"
-        className='w-full'
-      />
-    </View>
+    <ScrollView 
+      className='flex-1 bg-secondary/30'
+      contentContainerStyle={{ paddingBottom: 24 }}
+      showsVerticalScrollIndicator={false}
+    >
+      <View className='p-6'>
+        <View className='w-full'>
+          <View className='mb-4'>
+            <Text className='text-2xl font-bold text-foreground'>Entities</Text>
+            <Text className='text-sm text-muted-foreground'>Discover local services and businesses</Text>
+          </View>
+          <FlatList
+            data={entities}
+            renderItem={({ item }) => <EntityCard item={item} />}
+            keyExtractor={(item) => item.id.toString()}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            snapToInterval={CARD_WIDTH}
+            decelerationRate="fast"
+            className='w-full'
+          />
+        </View>
+
+        <View className='w-full mt-8'>
+          <View className='mb-4'>
+            <Text className='text-2xl font-bold text-foreground'>Services</Text>
+            <Text className='text-sm text-muted-foreground'>Explore available services</Text>
+          </View>
+          <FlatList
+            data={services}
+            renderItem={({ item }) => <ServiceCard item={item} />}
+            keyExtractor={(item) => item.id.toString()}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            snapToInterval={CARD_WIDTH}
+            decelerationRate="fast"
+            className='w-full'
+          />
+        </View>
+      </View>
+    </ScrollView>
   );
 }

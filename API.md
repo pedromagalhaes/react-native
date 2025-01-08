@@ -1,3 +1,67 @@
+http://localhost:4001/api/entities/services
+
+{
+    "data": [
+        {
+            "id": 3,
+            "service_name": "Repair Center",
+            "short_description": "Fix your devices quickly",
+            "image_url": "https://picsum.photos/800/600",
+            "created_at": "2025-01-07T15:20:07.857Z",
+            "updated_at": "2025-01-07T15:20:07.857Z",
+            "published_at": null,
+            "entity": {
+                "id": 3,
+                "entity_name": "Intermarché Moncarapacho"
+            },
+            "status": {
+                "id": 1,
+                "name": "draft"
+            }
+        },
+        {
+            "id": 2,
+            "service_name": "Barista Training",
+            "short_description": "Learn how to make the perfect cup of coffee",
+            "image_url": "https://picsum.photos/800/600",
+            "created_at": "2025-01-07T15:20:07.857Z",
+            "updated_at": "2025-01-07T15:20:07.857Z",
+            "published_at": null,
+            "entity": {
+                "id": 2,
+                "entity_name": "Galp"
+            },
+            "status": {
+                "id": 3,
+                "name": "published"
+            }
+        },
+        {
+            "id": 1,
+            "service_name": "Consultation",
+            "short_description": "Business consultation and strategy",
+            "image_url": "https://picsum.photos/800/600",
+            "created_at": "2025-01-07T15:20:07.857Z",
+            "updated_at": "2025-01-07T15:20:07.857Z",
+            "published_at": null,
+            "entity": {
+                "id": 1,
+                "entity_name": "Mercado Municipal de Moncarapacho"
+            },
+            "status": {
+                "id": 3,
+                "name": "published"
+            }
+        }
+    ],
+    "pagination": {
+        "currentPage": 1,
+        "totalPages": 1,
+        "totalItems": 3,
+        "itemsPerPage": 10
+    }
+}
+
 http://localhost:4001/api/entities/4
 
 {
