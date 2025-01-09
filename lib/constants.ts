@@ -14,5 +14,6 @@ export const NAV_THEME = {
     notification: 'hsl(0 72% 51%)', // destructive
     primary: 'hsl(0 0% 98%)', // primary
     text: 'hsl(0 0% 98%)', // foreground
+    slate: '#000'
   },
 };

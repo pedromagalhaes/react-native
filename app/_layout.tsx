@@ -57,6 +57,9 @@ export default function RootLayout() {
           options={{
             title: 'Starter Base',
             headerRight: () => <ThemeToggle />,
+            headerStyle: {
+              backgroundColor: isDarkColorScheme ? NAV_THEME.dark.slate : NAV_THEME.light.background,
+            },
           }}
         />
       </Stack>

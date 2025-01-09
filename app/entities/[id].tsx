@@ -1,7 +1,7 @@
 import { View, ScrollView, Image } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { Text } from "~/components/ui/text";
-import { Star } from "lucide-react-native";
+import { Star, Table } from "lucide-react-native";
 import Constants from "expo-constants";
 import { useEffect, useState } from "react";
 
@@ -113,8 +113,8 @@ export default function EntityScreen() {
             {entity.entity_name}
           </Text>
           <View className="flex-row items-center">
-            <Star size={16} className="text-yellow-400" fill="currentColor" />
-            <Text className="text-sm text-foreground ml-1 font-medium">
+            <Star size={20} className="text-yellow-400" fill="currentColor" />
+            <Text className="text-lg text-foreground ml-2 mr-1 font-medium">
               {Number(entity.rating).toFixed(1)}
             </Text>
             <Text className="text-sm text-muted-foreground ml-1">
