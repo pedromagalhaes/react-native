@@ -4,10 +4,10 @@
 // Reminder: Import types from ~/types.ts for Entity, Service, Review, Event, Category, and Location.
 
 import * as React from 'react';
-import { View, FlatList, Dimensions, ActivityIndicator, Image } from 'react-native';
-import { Text } from '~/components/ui/text';
+import { View, FlatList, Pressable, ActivityIndicator, Image } from 'react-native';
 import { Link } from 'expo-router';
-import { Pressable } from 'react-native';
+
+import { Text } from '~/components/ui/text';
 import { fetchData, fetchReviews, fetchEvents, fetchCategories, fetchLocations } from '~/utils/api';
 import EntityCard from '~/components/EntityCard';
 import ServiceCard from '~/components/ServiceCard';
@@ -52,7 +52,7 @@ export default function Screen() {
 
   return (
     <FlatList
-      className='pt-8'
+      className='pt-8 dark:bg-slate-900'
       data={[]}
       renderItem={() => null}
       keyExtractor={() => 'dummy'}
@@ -64,7 +64,7 @@ export default function Screen() {
             data={entities}
             renderItem={({ item }: { item: Entity }) => <EntityCard item={item} />}
           />
-          <View className='h-16' />
+          <View className='h-10' />
           <CarouselSection
             title="Services"
             subtitle="Explore available services"

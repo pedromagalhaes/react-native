@@ -7,7 +7,7 @@ import StarRating from './StarRating';
 import { Star } from 'lucide-react-native';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const CARD_WIDTH = SCREEN_WIDTH * 0.35;
+const CARD_WIDTH = SCREEN_WIDTH * 0.39;
 
 const EntityCard = ({ item }: { item: Entity }) => (
   <Link href={`/entities/${item.id}`} asChild>

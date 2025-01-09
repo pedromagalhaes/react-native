@@ -98,7 +98,7 @@ export default function EntityScreen() {
   )
 
   return (
-    <ScrollView className='flex-1 bg-background'>
+    <ScrollView className='flex-1 bg-secondary'>
       <Image
         source={{ uri: entity.image_url }}
         className='w-full aspect-[4/3]'
