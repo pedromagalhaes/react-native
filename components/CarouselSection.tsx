@@ -11,7 +11,7 @@ const CarouselSection = ({ title, subtitle, data, renderItem }: {
   data: any[];
   renderItem: any;
 }) => (
-  <View className='w-full'>
+  <View className='w-full '>
     <View className='px-5 mb-5'>
       <Text className='text-2xl font-bold text-foreground'>{title}</Text>
       <Text className='text-sm text-muted-foreground'>{subtitle}</Text>
