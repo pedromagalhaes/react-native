@@ -1,7 +1,7 @@
 import {
   View,
   FlatList,
-  Pressable,
+  Platform,
   ActivityIndicator,
   Image,
 } from "react-native";
@@ -9,6 +9,7 @@ import { useLocalSearchParams } from "expo-router";
 import { Text } from "~/components/ui/text";
 import { Badge } from "~/components/ui/badge";
 import CarouselSection from "~/components/CarouselSection";
+import Map from "~/components/Map";
 import { Star, Table } from "lucide-react-native";
 import Constants from "expo-constants";
 import { useEffect, useState } from "react";
@@ -58,6 +59,7 @@ export default function EntityScreen() {
   const { id } = useLocalSearchParams();
   const [entity, setEntity] = useState<Entity | null>(null);
   const [loading, setLoading] = useState(true);
+  const isWeb = Platform.OS === "web";
 
   useEffect(() => {
     fetchEntity();
@@ -173,6 +175,10 @@ export default function EntityScreen() {
                 </Text>
               </View>
             </View>
+          </View>
+
+          <View className='mb-8'>
+          <Map />
           </View>
 
           <View className="mb-8">
