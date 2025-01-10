@@ -20,7 +20,7 @@ const StarRating = ({ rating, reviews }: { rating: string; reviews: string }) =>
       {[...Array(emptyStars)].map((_, i) => (
         <Star key={`empty-${i}`} size={16} className='text-muted-foreground/20' strokeWidth={1.5} />
       ))}
-      <Text className='ml-2 text-sm text-muted-foreground'>({reviews})</Text>
+      {reviews && <Text className='ml-2 text-sm text-muted-foreground'>({reviews})</Text>}
     </View>
   );
 };
