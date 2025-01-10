@@ -28,9 +28,6 @@ yarn-error.*
 .DS_Store
 *.pem
 
-# local env files
-.env*.local
-
 # typescript
 *.tsbuildinfo
 
@@ -45,3 +42,7 @@ expo-env.d.ts
 .env.local
 .env.development
 .env.production
+.env.*
+.env*.local
+
+*.sql
