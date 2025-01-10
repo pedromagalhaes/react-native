@@ -5,7 +5,7 @@ import { Text } from '~/components/ui/text';
 import { Entity, Service, Review, Event, Category, Location } from '~/types';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const CARD_WIDTH = SCREEN_WIDTH * 0.33;
+const CARD_WIDTH = SCREEN_WIDTH * 0.4;
 
 const ServiceCard = ({ item }: { item: Service }) => (
   <Link href={`/services/${item.id}`} params={{ serviceId: item.id }} asChild>
@@ -15,7 +15,7 @@ const ServiceCard = ({ item }: { item: Service }) => (
           <Image
             source={{ uri: item.image_url }}
             className='w-full'
-            style={{ width: '100%', height: undefined, aspectRatio: 1 / 1 }}
+            style={{ width: '100%', height: undefined, aspectRatio: 16 / 10 }}
           />
         </View>
         <View className='mt-2'>
