@@ -12,9 +12,8 @@ const CarouselSection = ({ title, subtitle, data, renderItem }: {
   renderItem: any;
 }) => (
   <View className='w-full '>
-    <View className='px-5 mb-5'>
-      <Text className='text-2xl font-bold text-foreground'>{title}</Text>
-      <Text className='text-sm text-muted-foreground'>{subtitle}</Text>
+    <View className='px-4 mb-2'>
+      <Text className='text-lg font-bold text-foreground'>{title}</Text>
     </View>
     <FlatList
       data={data}

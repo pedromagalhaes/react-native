@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Star } from 'lucide-react-native';
 import { Text } from '~/components/ui/text';
 
-const StarRating = ({ rating, reviews }: { rating: string; reviews: string }) => {
+const StarRating = ({ rating, reviews }: { rating: string; reviews?: string }) => {
   const ratingNum = Number(rating);
   const fullStars = Math.floor(ratingNum);
   const hasHalfStar = ratingNum % 1 >= 0.5;

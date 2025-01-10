@@ -1,10 +1,19 @@
-import { View, Image, FlatList, Pressable } from "react-native";
+import {
+  View,
+  FlatList,
+  Pressable,
+  ActivityIndicator,
+  Image,
+} from "react-native";
 import { useLocalSearchParams } from "expo-router";
-import { Text, Link } from "~/components/ui/text";
+import { Text } from "~/components/ui/text";
+import { Badge } from "~/components/ui/badge";
+import CarouselSection from "~/components/CarouselSection";
 import { Star, Table } from "lucide-react-native";
 import Constants from "expo-constants";
 import { useEffect, useState } from "react";
 import StarRating from "~/components/StarRating";
+import ServiceCard from "~/components/ServiceCard";
 
 const serverUrl =
   Constants.manifest?.extra?.SERVER_URL || "http://localhost:4001";
@@ -109,111 +118,119 @@ export default function EntityScreen() {
   // console the object to render as object in terminal
 
   return (
-    <View className="dark:bg-slate-900">
-      <Image
-        source={{ uri: entity.image_url }}
-        className="w-full aspect-[4/2]"
-        style={{ resizeMode: "cover" }}
-      />
-      <View className="pt-8 p-4">
-        <View className="flex-row items-center justify-between">
-          <Text className="text-2xl font-bold text-foreground">
-            {entity.entity_name}
-          </Text>
-        </View>
-
-        <View className="flex-row items-center justify-center text-center">
-          <Star size={20} className="text-yellow-400" fill="currentColor" />
-          <Text className="text-lg text-foreground ml-2 mr-1 font-medium">
-            {Number(entity.rating).toFixed(1)}
-          </Text>
-          <Text className="text-sm text-muted-foreground ml-1">
-            ({entity.reviews.length})
-          </Text>
-        </View>
-
-        <View className="mt-4 mb-7">
-          <Text className="font-medium mt-1">{entity.short_description}</Text>
-        </View>
-
-        <View className="mb-4 flex-row items-center align-center justify-start">
-          <View className="mr-6">
-            <Text className="text-sm font-medium text-muted-foreground pr-1">
-              Location
-            </Text>
-            <Text className="text-sm font-medium">
-              {entity?.location?.location_name}
-            </Text>
-          </View>
-
-          <View className="">
-            <Text className="text-sm font-medium text-muted-foreground pr-1">
-              Category
-            </Text>
-            <Text className="text-sm font-medium">
-              {entity?.category?.category_name}
-            </Text>
-          </View>
-        </View>
-
-        <View className="mt-4 mb-4">
-          <Text className="text-lg font-bold text-foreground">Reviews</Text>
-          <FlatList
-            style={{
-              paddingLeft: 0,
-              marginLeft: 0,
-            }}
-            data={entity.reviews}
-            renderItem={({ item }) => (
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  paddingLeft: 0,
-                  paddingRight: 0,
-                  paddingTop: 16,
-                }}
-              >
-                <Image
-                  source={{ uri: item.entity.image_url }}
-                  style={{ width: 30, height: 30, borderRadius: 30 }}
-                />
-                <View style={{ flex: 1, marginLeft: 16 }}>
-                  <Text className="text-sm text-muted-foreground">
-                    {`${item.user ? item.user.name : "Anonymous"}: ${
-                      item.comment
-                    }`}
-                  </Text>
-                  <StarRating rating={item.rating.toString()} />
-                </View>
-              </View>
-            )}
-            keyExtractor={(item) => item.id.toString()}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingHorizontal: 0 }}
+    <FlatList
+      data={[]}
+      renderItem={() => null}
+      keyExtractor={() => "dummy"}
+      ListHeaderComponent={
+        <View className="dark:bg-slate-900">
+          <Image
+            source={{ uri: entity.image_url }}
+            className="w-full aspect-[4/2]"
+            style={{ resizeMode: "cover" }}
           />
-        </View>
-
-        <View className="mt-4">
-          <Text className="text-lg font-bold text-foreground">Services</Text>
-          {entity.services.length > 0 ? (
-            entity.services.map((service) => (
-              <View key={service.id} className="mt-2">
-                <Text className="text-base text-foreground">
-                  {service.service_name}
+          <View className="pt-8 p-4">
+            <View className="mb-8 flex-row items-center justify-between">
+              <Text className="text-2xl font-bold text-foreground">
+                {entity.entity_name}
+              </Text>
+              <View className="flex-row items-center">
+                <Star
+                  size={20}
+                  className="text-yellow-400"
+                  fill="currentColor"
+                />
+                <Text className="text-lg text-foreground ml-2 mr-1 font-medium">
+                  {Number(entity.rating).toFixed(1)}
                 </Text>
-                <Text className="text-sm text-muted-foreground">
-                  {service.description}
+                <Text className="text-sm text-muted-foreground ml-1">
+                  ({entity.reviews.length})
                 </Text>
               </View>
-            ))
-          ) : (
-            <Text className="text-sm text-muted-foreground">
-              No services available for this entity.
-            </Text>
-          )}
+            </View>
+
+            <View className="mb-8 mb-7">
+              <Text className="font-medium mt-1">
+                {entity.short_description}
+              </Text>
+            </View>
+            <View className="mb-8 flex-row items-center align-center justify-start">
+              <View className="mr-6">
+                <Text className="text-sm font-medium text-muted-foreground pr-1">
+                  Location
+                </Text>
+                <Text className="text-sm font-medium">
+                  {entity?.location?.location_name}
+                </Text>
+              </View>
+
+              <View className="">
+                <Text className="text-sm font-medium text-muted-foreground pr-1">
+                  Category
+                </Text>
+                <Text className="text-sm font-medium">
+                  {entity?.category?.category_name}
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          <View className="mb-8">
+            {entity.services.length > 0 ? (
+              <CarouselSection
+                title="Services"
+                subtitle="Explore available services"
+                data={entity.services}
+                renderItem={({ item }: { item: Service }) => (
+                  <ServiceCard item={item} />
+                )}
+              />
+            ) : (
+              <Text className="text-sm text-muted-foreground">
+                No services available for this entity.
+              </Text>
+            )}
+          </View>
+
+          <View className="mb-8 px-4">
+            <Text className="text-lg font-bold text-foreground">Reviews</Text>
+            <FlatList
+              style={{
+                paddingLeft: 0,
+                marginLeft: 0,
+              }}
+              data={entity.reviews}
+              renderItem={({ item }) => (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingLeft: 0,
+                    paddingRight: 0,
+                    paddingTop: 16,
+                  }}
+                >
+                  <Image
+                    source={{ uri: item.entity.image_url }}
+                    style={{ width: 30, height: 30, borderRadius: 30 }}
+                  />
+                  <View style={{ flex: 1, marginLeft: 12 }}>
+                    <Text className="text-sm text-muted-foreground">
+                      {`${item.user ? item.user.name : "Anonymous"}: ${
+                        item.comment
+                      }`}
+                    </Text>
+                    <StarRating rating={item.rating.toString()} />
+                  </View>
+                </View>
+              )}
+              keyExtractor={(item) => item.id.toString()}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingHorizontal: 0 }}
+            />
+          </View>
         </View>
-      </View>
-    </View>
+      }
+    />
   );
 }
