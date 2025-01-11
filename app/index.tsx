@@ -16,6 +16,7 @@ import CategoryCard from '~/components/CategoryCard';
 import LocationCard from '~/components/LocationCard';
 import StarRating from '~/components/StarRating';
 import CarouselSection from '~/components/CarouselSection';
+import HomeScreenHero from '~/components/HomeScreenHero';
 import { Entity, Service, Review, Event, Category, Location } from '~/types';
 
 export default function Screen() {
@@ -52,12 +53,13 @@ export default function Screen() {
 
   return (
     <FlatList
-      className='pt-8 dark:bg-slate-900'
+      className='dark:bg-slate-900'
       data={[]}
       renderItem={() => null}
       keyExtractor={() => 'dummy'}
       ListHeaderComponent={
         <View>
+          <HomeScreenHero entities={entities} />
           <CarouselSection
             title="Entities"
             subtitle="Discover local services and businesses"
